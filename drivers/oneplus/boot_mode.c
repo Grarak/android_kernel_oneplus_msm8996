@@ -5,7 +5,7 @@
 static enum oem_boot_mode boot_mode = MSM_BOOT_MODE__NORMAL;
 
 char *enum_ftm_mode[] = {"normal", "fastboot","recovery","aging" "ftm_at", "ftm_rf",
-"ftm_wlan","ftm_mos","charge"}; //shankai@bsp add aging mode  2016-1-14
+"ftm_wlan","ftm_mos","charge"};
 
 enum oem_boot_mode get_boot_mode(void)
 {
@@ -32,7 +32,7 @@ static int __init boot_mode_init(void)
             boot_mode = MSM_BOOT_MODE__MOS;
         else if(strncmp(substr, "ftmrecovery", 11) == 0)
             boot_mode = MSM_BOOT_MODE__RECOVERY;
-        else if(strncmp(substr, "ftm_aging", 9) == 0)     //shankai@bsp ,add for aging mode support 2016-1-14
+        else if(strncmp(substr, "ftm_aging", 9) == 0)
             boot_mode = MSM_BOOT_MODE__AGING;
 
    }
