@@ -2473,3 +2473,8 @@
 	/delete-property/ qcom,force-reg-dump;
 };
 //msm8996-coresight-v3.dtsi end
+//msm8996-gpu.dtsi start
+&pil_gpu {
+	qcom,firmware-name = "a530_zap-pro";
+};
+//msm8996-gpu.dtsi end
