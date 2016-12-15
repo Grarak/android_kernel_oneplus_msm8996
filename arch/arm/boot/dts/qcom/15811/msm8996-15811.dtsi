@@ -1245,9 +1245,8 @@
 	qcom,init-voltage = <3000000>;
 };
 &pm8994_l27 {
-	regulator-min-microvolt = <1200000>;
 	regulator-max-microvolt = <1200000>;
-	qcom,init-voltage = <1200000>;
+	qcom,init-voltage = <1030000>;
 };
 //msm8996-regulator.dtsi end
 //msm8996-pm.dtsi start
@@ -2017,8 +2016,12 @@
 		};
 	};
 
-	/delete-node/ cam_csi1_sensor_active;
-	/delete-node/ cam_csi1_sensor_suspend;
+	cam_csi1_sensor_active: cam_csi1_sensor_active {
+		/delete-node/ cam_rear_active_cfg;
+	};
+	cam_csi1_sensor_suspend: cam_csi1_sensor_suspend {
+		/delete-node/ cam_rear_suspend_cfg;
+	};
 
 	cam_sensor_mclk2_active: cam_sensor_mclk2_active {
 		config {
@@ -2032,11 +2035,20 @@
 		};
 	};
 
-/*ruanbanmao modify 2015.12.25. gpio 90 is uesed as SPI cs, so we should remove from here.*/
-	/delete-node/ seta_18;
-/*ruanbanmao modify 2015.12.25. gpio 90 is uesed as SPI cs, so we should remove from here.*/
+	seta_18: seta_18 {
+		mux {
+			/delete-property/ pins;
+			/delete-property/ function;
+		};
 
-    pmx_gpio_switch {
+		config {
+			/delete-property/ pins;
+			/delete-property/ drive-strength;
+			/delete-property/ bias-disable;
+		};
+	};
+
+	pmx_gpio_switch {
 		pmx_gpio_switch_pin_active: pmx_gpio_switch_pin_active {
 			mux {
 				pins = "gpio97","gpio98","gpio100","gpio115","gpio127","gpio133","gpio136";
@@ -2160,7 +2172,7 @@
 	};
 };
 
-&cam_csi2_sensor_suspend{
+&cam_csi2_sensor_suspend {
 	cam_rear_suspend_cfg {
 		pins = "gpio23";
 	};
@@ -2187,7 +2199,10 @@
 };
 /*ruanbanmao modify 2015.12.25. gpio 90 is uesed as SPI cs, so we should remove from here.*/
 &tsif0_signals_active {
-	/delete-node/ tsif1_en;
+	tsif1_en {
+		/delete-property/ pins;
+		/delete-property/ function;
+	};
 	signals_cfg {
 		pins = "gpio89", "gpio91";
 	};
@@ -2223,18 +2238,16 @@
 //msm8996.dtsi start
 / {
 	aliases {
-		/delete-property/ sdhc_1;
-		/delete-property/ sdhc_2;
 		i2c3 = &i2c_3;
 		/delete-property/ pci-domain1;
 		/delete-property/ pci-domain2;
 		spi11 = &spi_11;
 	};
 	reserved-memory {
-        ramoops_mem: ramoops_mem@ac000000 {
-                reg = <0 0xAC000000 0 0x00200000>;
-                label = "ramoops_mem";
-        };
+		ramoops_mem: ramoops_mem@ac000000 {
+			reg = <0 0xAC000000 0 0x00200000>;
+			label = "ramoops_mem";
+		};
 
 		param_mem: param_mem@ac200000 {
 			reg = <0 0xAC200000 0 0x00100000>;
@@ -2317,16 +2330,20 @@
 	qcom,disable-dma;
 };
 
+&pcie0 {
+	vreg-cx-supply = <&pm8994_s1_corner_ao>;
+};
+
 &pcie1 {
-		status = "disabled";
+	status = "disabled";
 };
 
 &pcie2 {
-		status = "disabled";
+	status = "disabled";
 };
 
 &wdog {
-		qcom,bark-time = <15000>;
+	qcom,bark-time = <15000>;
 };
 
 &qusb_phy0 {
@@ -2345,6 +2362,11 @@
 
 &qusb_phy1 {
 		status = "disabled";
+};
+
+&qcom_crypto {
+	/delete-property/ qcom,use-sw-hmac-algo;
+	/delete-property/ qcom,use-sw-aead-algo;
 };
 
 &soc {
@@ -2383,8 +2405,6 @@
 			pinctrl-1 = <&quat_mi2s_sleep  &quat_mi2s_sd0_sleep &quat_mi2s_sd1_sleep >;
 		};
 	};
-	/delete-node/ sdhc_1;
-	/delete-node/ sdhc_2;
 
 	ramoops {
 		compatible = "ramoops";
@@ -2395,6 +2415,8 @@
 		compatible = "bootloader_log";
 		linux,contiguous-region = <&bootloader_log_mem>;
 	};
+
+	/delete-node/ qcom,msm-power;
 };
 &dai_tert_tdm_tx_1 {
 	/delete-property/ qcom,msm-cpudai-tdm-data-align;
@@ -2416,3 +2438,7 @@
 	qcom,firmware-name = "a530_zap-pro";
 };
 //msm8996-gpu.dtsi end
+//msm8996-v3.dtsi start
+&msm_thermal_freq {
+	qcom,levels = <1555200 1555200 1555200>;
+};
