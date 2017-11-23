@@ -71,6 +71,7 @@ enum oem_boot_mode{
 
 /*------------------------------------------------Global Define--------------------------------------------*/
 #define TP_TEST_ENABLE 1
+#define TPD_NAME "synaptics"
 #define TPD_DEVICE "HWK,synaptics,s1302"
 #define LOG_TAG		"touchkey,s1302"
 
@@ -97,7 +98,7 @@ enum oem_boot_mode{
 /*---------------------------------------------Global Variable----------------------------------------------*/
 static unsigned int tp_debug = 0;
 static int force_update = 0;
-static int key_reverse = 0;
+static int key_reverse = 1;
 static struct synaptics_ts_data *tc_g = NULL;
 int test_err = 0;
 static int touchkey_wait_time = 45;
@@ -957,7 +958,7 @@ static int	synaptics_input_init(struct synaptics_ts_data *ts)
 		TPD_ERR("synaptics_ts_probe: Failed to allocate input device\n");
 		return ret;
 	}
-    ts->input_dev->name = TPD_DEVICE;;
+    ts->input_dev->name = TPD_NAME;;
     ts->input_dev->dev.parent = &ts->client->dev;
 	set_bit(EV_SYN, ts->input_dev->evbit);
 	set_bit(EV_KEY, ts->input_dev->evbit);
